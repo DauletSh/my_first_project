@@ -1,0 +1,101 @@
+def add_user(name, age):
+    with open("users.txt", "a", encoding="utf-8") as file:
+        file.write(f"Имя: {name}, Возраст: {age}\n")
+
+
+def read_users():
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                print(line.rstrip("\n"))
+    except FileNotFoundError:
+        print("Файл не найден!")
+
+
+
+def find_user(name):
+    if name.strip() == "":
+        return "Вы не ввели имени"
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                if name == user_name:
+                    return line.strip()             
+
+    except FileNotFoundError:
+        return "Файл не найден!"
+
+    return "Такого имени нет"
+
+def delete_user(name):
+    
+    users = []
+    found = False
+
+    if name.strip() == "":
+        return "Нужно ввести имя"
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                    part = line.split(",")
+                    first_part = part[0]
+                    user_name = first_part.split(":")[1].strip()
+                    if user_name != name:
+                        users.append(line) 
+                    else:
+                        found = True                                       
+
+        if not found:
+            return "Такого имени нет"
+
+        with open("users.txt", "w", encoding="utf-8") as file:
+            for user in users:
+                file.write(user)
+
+    except FileNotFoundError:
+        return "Такого файла нет"
+    
+    return "Пользователь удален!"
+
+
+
+
+while True:
+    print("1. Добавить пользователя")
+    print("2. Показать всех пользователей")
+    print("3. Найти пользователя")
+    print("4. Удалить пользователя")
+    print("5. Выход")
+
+    choice = input("Выберите действие: ")
+
+    if choice == "1":
+        name = input("Введите имя: ")
+        try:
+            age = int(input("Введите возраст: "))
+        except ValueError:
+            print("Нужно ввести возраст числами")
+            continue
+        add_user(name, age)
+        print("Пользователь сохранен!")
+    elif choice == "2":
+        read_users()
+    elif choice == "3":
+        name = input("Введите имя: ")
+        print(find_user(name))
+    elif choice == "4":
+        name = input("Введите имя для удаления: ")
+        print(delete_user(name))
+    elif choice == "5":
+        print("До свидания!")
+        break
+    else:
+        print("Неверный выбор!")
+
+        
+
