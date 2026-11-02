@@ -1,0 +1,53 @@
+def user_age_update(name, new_age):
+    users = []
+    found = False
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                if name == user_name:
+                    users.append(f"Имя: {name}, Возраст: {new_age}\n")
+                    found = True
+                else:
+                    users.append(line)
+
+            if not found:
+                return "Такого имени нет в списке"
+    except FileNotFoundError:
+        return "Файл не найден"
+
+    
+    try:
+        with open("users.txt", "w", encoding="utf-8") as file:
+            for user in users:
+                file.write(user)
+        
+        
+            return "Запись перезаписана"
+
+    except FileNotFoundError:
+        print("Файл не найден")
+
+    name = name.strip()
+
+    if name == "":
+        return "Имя не может быть пустым"
+
+    if new_age < 1 or new_age > 120:
+        return "Возраст должен быть от 1 до 120"
+    
+    try:
+        with open("users.txt", "w", encoding="utf-8") as file:
+            for user in users:
+                file.write(user)
+        
+        
+            return "Запись перезаписана"
+
+    except FileNotFoundError:
+        print("Файл не найден")
+
+

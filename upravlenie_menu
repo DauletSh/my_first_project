@@ -1,7 +1,32 @@
+
 def add_user(name, age):
+    name = name.strip()
+    if name == "":
+        return "Имя не может быть пустым"
+
+    if age < 1 or age > 120:
+        return "Возраст должен быть от 1 и меньше 120"
+    
     with open("users.txt", "a", encoding="utf-8") as file:
         file.write(f"Имя: {name}, Возраст: {age}\n")
 
+    return "Пользователь сохранен!"
+
+def user_exists(name):
+    try:
+        with open("users.txt", "r", encoding="utf-8")as file:
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                
+                if name == user_name:
+                    return True
+    
+    except FileNotFoundError:
+        return False
+
+    return False
 
 def read_users():
     try:
@@ -10,7 +35,6 @@ def read_users():
                 print(line.rstrip("\n"))
     except FileNotFoundError:
         print("Файл не найден!")
-
 
 
 def find_user(name):
@@ -31,8 +55,8 @@ def find_user(name):
 
     return "Такого имени нет"
 
+
 def delete_user(name):
-    
     users = []
     found = False
 
@@ -62,40 +86,104 @@ def delete_user(name):
     
     return "Пользователь удален!"
 
+def user_age_update(name, new_age):
+    name = name.strip()
+    
+    if name == "":
+        return "Имя не может быть пустым"
+    
+    if new_age < 1 or new_age > 120:
+        return "Возраст должен быть от 1 до 120"
 
+    users = []
+    found = False
 
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                if name == user_name:
+                    users.append(f"Имя: {name}, Возраст: {new_age}\n")
+                    found = True
+                else:
+                    users.append(line)
+        
+            
+    except FileNotFoundError:
+            return "Файл не найден"
+
+    if not found:
+        return "Такого имени нет в списке"
+    
+   
+    with open("users.txt", "w", encoding="utf-8") as file:
+        for user in users:
+                file.write(user)       
+        
+        return "Запись перезаписана"
+
+  
 
 while True:
+    print(" \n")
     print("1. Добавить пользователя")
     print("2. Показать всех пользователей")
     print("3. Найти пользователя")
     print("4. Удалить пользователя")
-    print("5. Выход")
+    print("5 Изменить возраст пользователя")
+    print("6. Выход")
+
 
     choice = input("Выберите действие: ")
-
     if choice == "1":
-        name = input("Введите имя: ")
+        name = input("Введите имя: ").strip()
+
+        if name == "":
+            print("Имя не может быть пустым")
+            continue
+        if user_exists(name):
+            print("Пользователь с таким именем уже существует")
+            continue
         try:
             age = int(input("Введите возраст: "))
         except ValueError:
             print("Нужно ввести возраст числами")
             continue
-        add_user(name, age)
-        print("Пользователь сохранен!")
+
+
+        print(add_user(name, age))
+       
+
     elif choice == "2":
         read_users()
+    
     elif choice == "3":
         name = input("Введите имя: ")
         print(find_user(name))
+    
     elif choice == "4":
         name = input("Введите имя для удаления: ")
         print(delete_user(name))
+
     elif choice == "5":
+        name = input("Введите имя пользователя: ").strip()
+
+        try:
+            new_age = int(input("Введите новый возраст: "))
+        except ValueError:
+            
+            print("Возраст должен быть числом")
+            continue
+
+        print(user_age_update(name, new_age))
+    
+    elif choice == "6":
         print("До свидания!")
         break
+    
     else:
         print("Неверный выбор!")
 
-        
 
