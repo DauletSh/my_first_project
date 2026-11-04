@@ -124,7 +124,50 @@ def user_age_update(name, new_age):
         
         return "Запись перезаписана"
 
-  
+def rename_user(old_name, new_name):
+    old_name = old_name.strip()
+    new_name = new_name.strip()
+
+    if old_name == "" or new_name == "":
+        return "Нужно ввести имя"
+
+    if user_exists(new_name):
+        return "Пользователь с таким именем уже есть в спискею"
+    
+    users = []
+    found = False
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                
+                age =  part[1].split(":")[1].strip()
+            
+                if user_name == old_name:
+                    users.append(f"Имя: {new_name}, Возраст: {age}\n")
+                    found = True
+                else:
+                    users.append(line)
+
+    except FileNotFoundError:
+            return "Файл не найден" 
+            
+    if not found:
+        return "Такого имени нет"
+
+       
+    try:
+        with open("users.txt", "w", encoding="utf-8") as file:
+            for user in users:
+                file.write(user)
+
+    except FileNotFoundError:
+        return "Файл не найден"   
+
+    return "Имя пользователя изменено!"    
 
 while True:
     print(" \n")
@@ -132,8 +175,9 @@ while True:
     print("2. Показать всех пользователей")
     print("3. Найти пользователя")
     print("4. Удалить пользователя")
-    print("5 Изменить возраст пользователя")
-    print("6. Выход")
+    print("5. Изменить возраст пользователя")
+    print("6. Изменить имя пользователя")
+    print("7. Выход")
 
 
     choice = input("Выберите действие: ")
@@ -178,8 +222,14 @@ while True:
             continue
 
         print(user_age_update(name, new_age))
-    
+
     elif choice == "6":
+        old_name = input("Введите имя пользователя: ").strip()
+        new_name = input("Введите новое имя: ").strip()
+       
+        print(rename_user(old_name, new_name))
+    
+    elif choice == "7":
         print("До свидания!")
         break
     
