@@ -132,7 +132,7 @@ def rename_user(old_name, new_name):
         return "Нужно ввести имя"
 
     if user_exists(new_name):
-        return "Пользователь с таким именем уже есть в спискею"
+        return "Пользователь с таким именем уже существует"
     
     users = []
     found = False
@@ -167,7 +167,53 @@ def rename_user(old_name, new_name):
     except FileNotFoundError:
         return "Файл не найден"   
 
-    return "Имя пользователя изменено!"    
+    return "Имя пользователя изменено!"   
+
+def user_statistics():
+
+    count = 0
+    total_age = 0
+    min_age = None
+    max_age = None
+    min_name = None
+    max_name = None
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            
+            for line in file:
+                part = line.split(",")
+                first_part = part[0]
+                user_name = first_part.split(":")[1].strip()
+                age = int(part[1].split(":")[1].strip())
+
+                count +=1
+                total_age += age
+
+
+                if min_age is None or age <min_age:
+                    min_age = age
+                    min_name = user_name
+                if max_age is None or age > max_age:
+                    max_age = age
+                    max_name = user_name
+    
+        average_age = total_age/count
+
+
+    except FileNotFoundError:
+        return "Файл не найден"
+
+    if count == 0:
+        return "Список пуст"
+    
+    return(
+        f"Количество пользователей: {count}\n"
+        f"Самый младший: {min_name}, {min_age} лет\n"
+        f"Самый старший: {max_name}, {max_age} лет\n"
+        f"Средний возрас: {average_age:.1f} лет"
+        ) 
+
 
 while True:
     print(" \n")
@@ -177,7 +223,8 @@ while True:
     print("4. Удалить пользователя")
     print("5. Изменить возраст пользователя")
     print("6. Изменить имя пользователя")
-    print("7. Выход")
+    print("7. Показать статистику")
+    print("8. Выход")
 
 
     choice = input("Выберите действие: ")
@@ -228,8 +275,11 @@ while True:
         new_name = input("Введите новое имя: ").strip()
        
         print(rename_user(old_name, new_name))
-    
+
     elif choice == "7":
+        print(user_statistics())
+    
+    elif choice == "8":
         print("До свидания!")
         break
     
