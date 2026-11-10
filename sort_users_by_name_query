@@ -1,0 +1,30 @@
+def search_users_by_name(query):
+
+    query = query.strip()
+
+# проверяем на пустое имя в запросе
+    if query == "":
+        return "Введите имя для поиска"
+
+
+    users = []
+
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                user_name = part[0].split(":")[1].strip()
+
+
+                if query.lower() in user_name.lower():
+                    users.append(line.strip())
+
+
+    except FileNotFoundError:
+        return "Файл не найден"
+
+    return users
+
+print(search_users_by_name("Ба"))
+print(search_users_by_name(""))

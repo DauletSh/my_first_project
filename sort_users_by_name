@@ -1,0 +1,28 @@
+def get_name(line):
+
+    part = line.split(",")
+    user_name = part[0].split(":")[1].strip()
+    return user_name.lower()
+
+   
+
+def sort_user_by_name(reverse = False):
+    users = []
+    
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                users.append(line.strip())
+
+        sorted_users = sorted(users, key=get_name, reverse = reverse)
+
+    except FileNotFoundError:
+        return "Файл не найден"
+
+    return sorted_users
+
+print(sort_user_by_name(reverse=True))
+print(sort_user_by_name())
+
+
+
