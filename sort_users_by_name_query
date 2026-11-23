@@ -1,11 +1,12 @@
-def search_users_by_name(query):
+prefix = input("Введите начало имени: ")
 
-    query = query.strip()
+def search_users_by_name(prefix):
 
-# проверяем на пустое имя в запросе
-    if query == "":
-        return "Введите имя для поиска"
+    prefix = prefix.strip()
 
+    # проверяем на пустое имя в запросе
+    if prefix == "":
+        return "Введите начало имени для поиска"
 
     users = []
 
@@ -16,8 +17,7 @@ def search_users_by_name(query):
                 part = line.split(",")
                 user_name = part[0].split(":")[1].strip()
 
-
-                if query.lower() in user_name.lower():
+                if user_name.lower().startswith(prefix.lower()):
                     users.append(line.strip())
 
 
@@ -25,6 +25,6 @@ def search_users_by_name(query):
         return "Файл не найден"
 
     return users
+  
 
-print(search_users_by_name("Ба"))
-print(search_users_by_name(""))
+print(search_users_by_name(prefix))

@@ -1,0 +1,30 @@
+suffix = input("Введите окончание имени: ")
+
+def search_users_by_name(suffix):
+
+    suffix = suffix.strip()
+
+    # проверяем на пустое имя в запросе
+    if suffix == "":
+        return "Введите окончания имени для поиска"
+
+    users = []
+
+
+    try:
+        with open("users.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                part = line.split(",")
+                user_name = part[0].split(":")[1].strip()
+
+                if user_name.lower().endswith(suffix.lower()):
+                    users.append(line.strip())
+
+
+    except FileNotFoundError:
+        return "Файл не найден"
+
+    return users
+  
+
+print(search_users_by_name(suffix))
