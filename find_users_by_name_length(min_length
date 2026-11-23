@@ -1,0 +1,22 @@
+def find_users_by_name_length(min_length):   
+    try:
+        with open("/Users/dsh/Project_python/my_first_project/users.txt", "r", encoding="utf-8") as file:
+            users = []
+            for line in file:
+                part = line.split(",")
+                user_name = part[0].split(":")[1].strip()
+
+                if len(user_name) >= min_length:
+                    users.append(line.strip())
+    
+    except FileNotFoundError:
+        return "Файл не найден"
+        
+    return users
+
+#print(find_users_by_name_length(3))
+#print(find_users_by_name_length(5))
+#print(find_users_by_name_length(7))
+print(find_users_by_name_length(9))
+
+

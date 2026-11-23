@@ -1,6 +1,6 @@
 suffix = input("Введите окончание имени: ")
 
-def search_users_by_name(suffix):
+def search_users_by_suffix(suffix):
 
     suffix = suffix.strip()
 
@@ -12,7 +12,7 @@ def search_users_by_name(suffix):
 
 
     try:
-        with open("users.txt", "r", encoding="utf-8") as file:
+        with open("/Users/dsh/Project_python/my_first_project/users.txt", "r", encoding="utf-8") as file:
             for line in file:
                 part = line.split(",")
                 user_name = part[0].split(":")[1].strip()
@@ -27,4 +27,4 @@ def search_users_by_name(suffix):
     return users
   
 
-print(search_users_by_name(suffix))
+print(search_users_by_suffix(suffix))
